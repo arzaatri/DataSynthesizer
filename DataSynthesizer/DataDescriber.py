@@ -2,7 +2,7 @@ import json
 from typing import Dict, List, Union
 
 from numpy import array_equal
-from pandas import DataFrame, read_csv
+from pandas import DataFrame, Series, read_csv
 
 from DataSynthesizer.datatypes.AbstractAttribute import AbstractAttribute
 from DataSynthesizer.datatypes.DateTimeAttribute import is_datetime, DateTimeAttribute
@@ -84,7 +84,7 @@ class DataDescriber:
         self.attr_to_is_categorical = attribute_to_is_categorical
         self.attr_to_is_candidate_key = attribute_to_is_candidate_key
         
-        if isinstance(dataset, (pd.DataFrame, pd.Series)):
+        if isinstance(dataset, (DataFrame, Series)):
             self.df_input = dataset
             self.check_input_df()
         else:
