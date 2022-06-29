@@ -62,7 +62,7 @@ class DataDescriber:
         self.df_encoded: DataFrame = None
 
     def describe_dataset_in_random_mode(self,
-                                        dataset_file: str,
+                                        dataset: str,
                                         attribute_to_datatype: Dict[str, DataType] = None,
                                         attribute_to_is_categorical: Dict[str, bool] = None,
                                         attribute_to_is_candidate_key: Dict[str, bool] = None,
@@ -83,7 +83,12 @@ class DataDescriber:
         self.attr_to_datatype = {attr: DataType(datatype) for attr, datatype in attribute_to_datatype.items()}
         self.attr_to_is_categorical = attribute_to_is_categorical
         self.attr_to_is_candidate_key = attribute_to_is_candidate_key
-        self.read_dataset_from_csv(dataset_file)
+        
+        if isinstance(dataset, (pd.DataFrame, pd.Series)):
+            self.df_input = dataset
+            self.check_input_df()
+        else:
+            self.read_dataset_from_csv(dataset)
         self.infer_attribute_data_types()
         self.analyze_dataset_meta()
         self.represent_input_dataset_by_columns()
@@ -103,7 +108,7 @@ class DataDescriber:
             self.data_description['attribute_description'][attr] = column.to_json()
 
     def describe_dataset_in_independent_attribute_mode(self,
-                                                       dataset_file,
+                                                       dataset,
                                                        epsilon=0.1,
                                                        attribute_to_datatype: Dict[str, DataType] = None,
                                                        attribute_to_is_categorical: Dict[str, bool] = None,
@@ -111,7 +116,7 @@ class DataDescriber:
                                                        categorical_attribute_domain_file: str = None,
                                                        numerical_attribute_ranges: Dict[str, List] = None,
                                                        seed=0):
-        self.describe_dataset_in_random_mode(dataset_file,
+        self.describe_dataset_in_random_mode(dataset,
                                              attribute_to_datatype,
                                              attribute_to_is_categorical,
                                              attribute_to_is_candidate_key,
@@ -129,7 +134,7 @@ class DataDescriber:
             self.data_description['attribute_description'][attr] = column.to_json()
 
     def describe_dataset_in_correlated_attribute_mode(self,
-                                                      dataset_file,
+                                                      dataset,
                                                       k=0,
                                                       epsilon=0.1,
                                                       attribute_to_datatype: Dict[str, DataType] = None,
@@ -142,8 +147,9 @@ class DataDescriber:
 
         Parameters
         ----------
-        dataset_file : str
-            File name (with directory) of the sensitive dataset as input in csv format.
+        dataset : str
+            File name (with directory) of the sensitive dataset as input in csv format, OR
+            A pd.DataFrame or pd.Series object of the sensitive dataset
         k : int
             Maximum number of parents in Bayesian network.
         epsilon : float
@@ -162,7 +168,7 @@ class DataDescriber:
         seed : int or float
             Seed the random number generator.
         """
-        self.describe_dataset_in_independent_attribute_mode(dataset_file,
+        self.describe_dataset_in_independent_attribute_mode(dataset,
                                                             epsilon,
                                                             attribute_to_datatype,
                                                             attribute_to_is_categorical,
@@ -185,8 +191,10 @@ class DataDescriber:
         except (UnicodeDecodeError, NameError):
             self.df_input = read_csv(file_name, skipinitialspace=True, na_values=self.null_values,
                                      encoding='latin1')
-
-        # Remove columns with empty active domain, i.e., all values are missing.
+            self.check_input_df()
+            
+    def check_input_df(self):
+         # Remove columns with empty active domain, i.e., all values are missing.
         attributes_before = set(self.df_input.columns)
         self.df_input.dropna(axis=1, how='all')
         attributes_after = set(self.df_input.columns)
