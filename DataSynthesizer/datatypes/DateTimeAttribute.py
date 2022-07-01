@@ -3,7 +3,8 @@ from typing import Union
 
 import numpy as np
 from dateutil.parser import parse
-from pandas import Series, concat
+from datetime import date
+from pandas import Series, concat, Timestamp
 
 from DataSynthesizer.datatypes.AbstractAttribute import AbstractAttribute
 from DataSynthesizer.datatypes.utils.DataType import DataType
@@ -18,6 +19,8 @@ def is_datetime(value: str):
               'jul', 'july', 'aug', 'august', 'sep', 'sept', 'september', 'oct', 'october', 'nov', 'november',
               'dec', 'december'}
 
+    if isinstance(value, Timestamp) or isinstance(value, date:
+        return True
     try:
         value_lower = value.lower()
         if (value_lower in weekdays) or (value_lower in months):
