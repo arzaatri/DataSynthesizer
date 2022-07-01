@@ -19,7 +19,7 @@ def is_datetime(value: str):
               'jul', 'july', 'aug', 'august', 'sep', 'sept', 'september', 'oct', 'october', 'nov', 'november',
               'dec', 'december'}
 
-    if isinstance(value, Timestamp) or isinstance(value, date:
+    if isinstance(value, Timestamp) or isinstance(value, date):
         return True
     try:
         value_lower = value.lower()
@@ -39,8 +39,7 @@ class DateTimeAttribute(AbstractAttribute):
         super().__init__(name, is_candidate_key, is_categorical, histogram_size, data)
         self.is_numerical = True
         self.data_type = DataType.DATETIME
-        epoch_datetime = parse('1970-01-01')
-        self.timestamps = self.data_dropna.map(lambda x: int((parse(x) - epoch_datetime).total_seconds()))
+        self.timestamps = self.data_dropna.map(self.create_timestamps)
 
     def infer_domain(self, categorical_domain=None, numerical_range=None):
         if numerical_range:
@@ -90,3 +89,13 @@ class DateTimeAttribute(AbstractAttribute):
         if not self.is_categorical:
             column[~column.isnull()] = column[~column.isnull()].astype(int)
         return column
+    
+    def create_timestamps(self, x):
+        """
+        Replaces used to determine seconds from UNIX timess
+        """
+        epoch_datetime = parse('1970-01-01')
+        try:
+            return int( (parse(x) - epoch_datetime).total_seconds() )
+        except TypeError: # If the above fails, it should be because x was a pd.Timestamp
+            return int( (x - epoch_datetime).total_seconds() )
