@@ -18,14 +18,16 @@ def is_datetime(value: str):
               'jul', 'july', 'aug', 'august', 'sep', 'sept', 'september', 'oct', 'october', 'nov', 'november',
               'dec', 'december'}
 
-    value_lower = value.lower()
-    if (value_lower in weekdays) or (value_lower in months):
-        return False
     try:
-        parse(value)
-        return True
-    except:
-        return False
+        value_lower = value.lower()
+        if (value_lower in weekdays) or (value_lower in months):
+            return False
+    except AttributeError:
+        try:
+            parse(value)
+            return True
+        except:
+            return False
 
 
 # TODO detect datetime formats
