@@ -1,6 +1,7 @@
 from typing import Union
 
 import numpy as np
+import re
 from pandas import Series
 
 from DataSynthesizer.datatypes.AbstractAttribute import AbstractAttribute
@@ -20,18 +21,27 @@ def pre_process(column: Series):
 
 def is_ssn(value):
     """
-    Test whether a number is between 0 and 1e9.
+    Test whether a number is a valid social security number. Regex taken from
+    https://stackoverflow.com/questions/34523247/social-security-number-validation-that-accepts-dashes-spaces-or-no-spaces
+    https://www.codeproject.com/Articles/651609/Validating-Social-Security-Numbers-through-Regular
+    With explanations therein
 
-    Note this function does not take into consideration some special numbers that are never allocated.
-    https://en.wikipedia.org/wiki/Social_Security_number
+    This function accepts social security numbers in the following forms, where d is a digit:
+        ddd-dd-dddd
+        ddd dd dddd
+        ddddddddd
+    And checks adherence to special cases, e.g. that no SSN can start with '666.' For more info, see
+    https://www.codeproject.com/Articles/651609/Validating-Social-Security-Numbers-through-Regular
     """
     if type(value) is int:
-        return 0 < value < 1e9
-    elif type(value) is str:
-        value = value.replace('-', '')
-        if value.isdigit():
-            return 0 < int(value) < 1e9
+        value = str(value)
+    pattern = re.compile("^((?!219-09-9999|078-05-1120)(?!666|000|9\d{2})\d{3}-(?!00)\d{2}-(?!0{4})\d{4})|((?!219 09 9999|078 05 1120)(?!666|000|9\d{2})\d{3} (?!00)\d{2} (?!0{4})\d{4})|((?!219099999|078051120)(?!666|000|9\d{2})\d{3}(?!00)\d{2}(?!0{4})\d{4})$")
+    
+    if re.search(pattern, value):
+        return True
     return False
+    
+        
 
 
 class SocialSecurityNumberAttribute(AbstractAttribute):
