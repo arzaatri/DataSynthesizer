@@ -33,7 +33,7 @@ def is_ssn(value):
     And checks adherence to special cases, e.g. that no SSN can start with '666.' For more info, see
     https://www.codeproject.com/Articles/651609/Validating-Social-Security-Numbers-through-Regular
     """
-    if type(value) is int:
+    if type(value) is not str:
         value = str(value)
     pattern = re.compile("^((?!219-09-9999|078-05-1120)(?!666|000|9\d{2})\d{3}-(?!00)\d{2}-(?!0{4})\d{4})|((?!219 09 9999|078 05 1120)(?!666|000|9\d{2})\d{3} (?!00)\d{2} (?!0{4})\d{4})|((?!219099999|078051120)(?!666|000|9\d{2})\d{3}(?!00)\d{2}(?!0{4})\d{4})$")
     
