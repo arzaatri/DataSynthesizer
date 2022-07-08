@@ -81,12 +81,20 @@ class AbstractAttribute(object):
         """
         if self.is_categorical:
             value_to_bin_idx = {value: idx for idx, value in enumerate(self.distribution_bins)}
-            encoded = self.data.map(lambda x: value_to_bin_idx[x], na_action='ignore')
+            encoded = self.data.map(lambda x: self.mapping_wrapper(x, value_to_bin_idx) ,na_action='ignore')
         else:
             encoded = self.data.map(lambda x: bisect_right(self.distribution_bins, x) - 1, na_action='ignore')
 
         encoded.fillna(len(self.distribution_bins), inplace=True)
         return encoded.astype(int, copy=False)
+    
+    def mapping_wrapper(self, x, mapping):
+        try:
+            return mapping[x]
+        except: 
+            # Handles errors where e.g. a column has mixed str and int, but the int was interpreted
+            # as str when creating self.distribution_bins
+            return mapping[str(x)]
 
     def to_json(self):
         """Encode attribution information in JSON format / Python dictionary.
