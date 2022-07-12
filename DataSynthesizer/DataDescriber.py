@@ -66,7 +66,7 @@ class DataDescriber:
                                         attribute_to_datatype: Dict[str, DataType] = None,
                                         attribute_to_is_categorical: Dict[str, bool] = None,
                                         attribute_to_is_candidate_key: Dict[str, bool] = None,
-                                        categorical_attribute_domain_file: str = None,
+                                        categorical_attribute_domain: [str, dict] = None,
                                         numerical_attribute_ranges: Dict[str, List] = None,
                                         seed=0):
         attribute_to_datatype = attribute_to_datatype or {}
@@ -74,8 +74,10 @@ class DataDescriber:
         attribute_to_is_candidate_key = attribute_to_is_candidate_key or {}
         numerical_attribute_ranges = numerical_attribute_ranges or {}
 
-        if categorical_attribute_domain_file:
-            categorical_attribute_to_domain = utils.read_json_file(categorical_attribute_domain_file)
+        if isinstance(categorical_attribute_domain, str):
+            categorical_attribute_to_domain = utils.read_json_file(categorical_attribute_domain)
+        elif isinstance(categorical_attribute_domain, dict):
+            categorical_attribute_to_domain = categorical_attribute_domain
         else:
             categorical_attribute_to_domain = {}
 
@@ -113,14 +115,14 @@ class DataDescriber:
                                                        attribute_to_datatype: Dict[str, DataType] = None,
                                                        attribute_to_is_categorical: Dict[str, bool] = None,
                                                        attribute_to_is_candidate_key: Dict[str, bool] = None,
-                                                       categorical_attribute_domain_file: str = None,
+                                                       categorical_attribute_domain: str = None,
                                                        numerical_attribute_ranges: Dict[str, List] = None,
                                                        seed=0):
         self.describe_dataset_in_random_mode(dataset,
                                              attribute_to_datatype,
                                              attribute_to_is_categorical,
                                              attribute_to_is_candidate_key,
-                                             categorical_attribute_domain_file,
+                                             categorical_attribute_domain,
                                              numerical_attribute_ranges,
                                              seed=seed)
 
@@ -140,7 +142,7 @@ class DataDescriber:
                                                       attribute_to_datatype: Dict[str, DataType] = None,
                                                       attribute_to_is_categorical: Dict[str, bool] = None,
                                                       attribute_to_is_candidate_key: Dict[str, bool] = None,
-                                                      categorical_attribute_domain_file: str = None,
+                                                      categorical_attribute_domain: str = None,
                                                       numerical_attribute_ranges: Dict[str, List] = None,
                                                       seed=0):
         """Generate dataset description using correlated attribute mode.
@@ -161,7 +163,7 @@ class DataDescriber:
             Dictionary of {attribute: boolean}, e.g., {"gender":True, "age":False}.
         attribute_to_is_candidate_key: dict
             Dictionary of {attribute: boolean}, e.g., {"id":True, "name":False}.
-        categorical_attribute_domain_file: str
+        categorical_attribute_domain: str
             File name of a JSON file of some categorical attribute domains.
         numerical_attribute_ranges: dict
             Dictionary of {attribute: [min, max]}, e.g., {"age": [25, 65]}
@@ -173,7 +175,7 @@ class DataDescriber:
                                                             attribute_to_datatype,
                                                             attribute_to_is_categorical,
                                                             attribute_to_is_candidate_key,
-                                                            categorical_attribute_domain_file,
+                                                            categorical_attribute_domain,
                                                             numerical_attribute_ranges,
                                                             seed)
         self.df_encoded = self.encode_dataset_into_binning_indices()
