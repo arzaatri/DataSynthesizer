@@ -7,7 +7,7 @@ from numpy import arange
 from pandas import DataFrame, Series
 from scipy.stats import entropy, ks_2samp
 
-from DataSynthesizer.lib.utils import pairwise_attributes_mutual_information, normalize_given_distribution
+from DataSynthesizer.lib.utils import pairwise_attributes_mutual_information, normalize_given_distribution, read_json_file
 
 matplotlib.rc('xtick', labelsize=20)
 matplotlib.rc('ytick', labelsize=20)
@@ -48,7 +48,10 @@ class ModelInspector(object):
     def __init__(self, private_df: DataFrame, synthetic_df: DataFrame, attribute_description):
         self.private_df = private_df
         self.synthetic_df = synthetic_df
-        self.attribute_description = attribute_description
+        if isinstance(attribute_description, dict):
+            self.attribute_description = attribute_description
+        else: # attribute_description can also be a filepath to the data description JSON
+            self.attribute_description = read_json_file(attribute_description)['attribute_description']
 
         self.candidate_keys = set()
         for attr in synthetic_df:
