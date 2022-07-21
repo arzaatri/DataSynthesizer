@@ -237,7 +237,8 @@ def get_noisy_distribution_of_attributes(attributes, encoded_dataset, epsilon=0.
         noise_para = laplace_noise_parameter(k, num_attributes, num_tuples, epsilon)
         laplace_noises = np.random.laplace(0, scale=noise_para, size=stats.index.size)
         stats['count'] += laplace_noises
-        stats.loc[stats['count'] < 0, 'count'] = 0
+        # So that negative counts become positive, and stay in the histogram
+        stats['count']  = np.abs(stats['counts'])
 
     return stats
 
