@@ -42,7 +42,7 @@ class DataGenerator(object):
 
     def generate_dataset_in_independent_mode(self, n, description_file=None, seed=0):
         set_random_seed(seed)
-        if self.description is None or (if self.description is not None and description_file is not None):
+        if self.description is None or (self.description is not None and description_file is not None):
             self.description = read_json_file(description_file)
 
         all_attributes = self.description['meta']['all_attributes']
@@ -61,7 +61,7 @@ class DataGenerator(object):
     def generate_dataset_in_correlated_attribute_mode(self, n, description_file=None, seed=0):
         set_random_seed(seed)
         self.n = n
-        if self.description is None or (if self.description is not None and description_file is not None):
+        if self.description is None or (self.description is not None and description_file is not None):
             self.description = read_json_file(description_file)
 
         all_attributes = self.description['meta']['all_attributes']
