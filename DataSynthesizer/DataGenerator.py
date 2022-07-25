@@ -17,7 +17,7 @@ class DataGenerator(object):
 
     def generate_dataset_in_random_mode(self, n, description_file=None, seed=0, minimum=0, maximum=100):
         set_random_seed(seed)
-        if self.description is None or (if self.description is not None and description_file is not None):
+        if self.description is None or (self.description is not None and description_file is not None):
             self.description = read_json_file(description_file)
 
         self.synthetic_dataset = DataFrame()
