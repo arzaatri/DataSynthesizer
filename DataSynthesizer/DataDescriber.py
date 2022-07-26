@@ -321,8 +321,7 @@ class DataDescriber:
                         attribute_to_datatype: Dict[str, DataType] = None,
                         attribute_to_is_categorical: Dict[str, bool] = None,
                         attribute_to_is_candidate_key: Dict[str, bool] = None,
-                        categorical
-                        _attribute_domain: [str, dict] = None,
+                        categorical_attribute_domain: [str, dict] = None,
                         numerical_attribute_ranges: Dict[str, List] = None,
                         seed=0):
         self.describe_dataset_in_random_mode(dataset,
