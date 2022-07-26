@@ -122,6 +122,14 @@ class DataGenerator(object):
     def save_synthetic_data(self, to_file):
         self.synthetic_dataset.to_csv(to_file, index=False)
 
+    def generate_random(self, n, description_file=None, seed=0, minimum=0, maximum=100):
+        self.generate_dataset_in_random_mode(n, description_file, seed, minimum, maximum)
+    
+    def generate_independent(self, n, description_file=None, seed=0):
+        self.generate_dataset_in_independent_mode(n, description_file, seed)
+        
+    def generate_correlated(self, n, description_file=None, seed=0):
+        self.generate_dataset_in_correlated_attribute_mode(n, description_file, seed)
 
 if __name__ == '__main__':
     from time import time

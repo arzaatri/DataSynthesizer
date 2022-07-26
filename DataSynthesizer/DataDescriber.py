@@ -314,3 +314,58 @@ class DataDescriber:
 
     def display_dataset_description(self):
         print(json.dumps(self.data_description, indent=4))
+
+    # More-concise aliases
+    def describe_random(self,
+                        dataset: str,
+                        attribute_to_datatype: Dict[str, DataType] = None,
+                        attribute_to_is_categorical: Dict[str, bool] = None,
+                        attribute_to_is_candidate_key: Dict[str, bool] = None,
+                        categorical
+                        _attribute_domain: [str, dict] = None,
+                        numerical_attribute_ranges: Dict[str, List] = None,
+                        seed=0):
+        self.describe_dataset_in_random_mode(dataset,
+                                             attribute_to_datatype,
+                                             attribute_to_is_categorical,
+                                             attribute_to_is_candidate_key,
+                                             categorical_attribute_domain,
+                                             numerical_attribute_ranges,
+                                             seed=seed)
+    
+    def describe_independent(self,
+                             dataset,
+                             epsilon=0.1,
+                             attribute_to_datatype: Dict[str, DataType] = None,
+                             attribute_to_is_categorical: Dict[str, bool] = None,
+                             attribute_to_is_candidate_key: Dict[str, bool] = None,
+                             categorical_attribute_domain: str = None,
+                             numerical_attribute_ranges: Dict[str, List] = None,
+                             seed=0):
+        self.describe_dataset_in_independent_attribute_mode(dataset,
+                                                            epsilon,
+                                                            attribute_to_datatype,
+                                                            attribute_to_is_categorical,
+                                                            attribute_to_is_candidate_key,
+                                                            categorical_attribute_domain,
+                                                            numerical_attribute_ranges,
+                                                            seed=seed)
+    def describe_correlated(self,
+                            dataset,
+                            k=0,
+                            epsilon=0.1,
+                            attribute_to_datatype: Dict[str, DataType] = None,
+                            attribute_to_is_categorical: Dict[str, bool] = None,
+                            attribute_to_is_candidate_key: Dict[str, bool] = None,
+                            categorical_attribute_domain: str = None,
+                            numerical_attribute_ranges: Dict[str, List] = None,
+                            seed=0):
+        self.describe_dataset_in_correlated_attribute_mode(dataset,
+                                                           k,
+                                                           epsilon,
+                                                           attribute_to_datatype,
+                                                           attribute_to_is_categorical,
+                                                           attribute_to_is_candidate_key,
+                                                           categorical_attribute_domain,
+                                                           numerical_attribute_ranges,
+                                                           seed=seed)
