@@ -21,8 +21,8 @@ class DataGenerator(object):
             self.description = read_json_file(description_file)
 
         self.synthetic_dataset = DataFrame()
-        for attr in description['attribute_description'].keys():
-            attr_info = description['attribute_description'][attr]
+        for attr in self.description['attribute_description'].keys():
+            attr_info = self.description['attribute_description'][attr]
             datatype = attr_info['data_type']
             is_categorical = attr_info['is_categorical']
             is_candidate_key = attr_info['is_candidate_key']
