@@ -134,13 +134,13 @@ class DataGenerator(object):
         self.synthetic_dataset.to_csv(to_file, index=False)
 
     def generate_random(self, n, description_file=None, seed=0, minimum=0, maximum=100, return_data=True):
-        self.generate_dataset_in_random_mode(n, description_file, seed, minimum, maximum, return_data)
+        return self.generate_dataset_in_random_mode(n, description_file, seed, minimum, maximum, return_data)
     
     def generate_independent(self, n, description_file=None, seed=0, return_data=True):
-        self.generate_dataset_in_independent_mode(n, description_file, seed, return_data)
+        return self.generate_dataset_in_independent_mode(n, description_file, seed, return_data)
         
     def generate_correlated(self, n, description_file=None, seed=0, return_data=True):
-        self.generate_dataset_in_correlated_attribute_mode(n, description_file, seed, return_data)
+        return self.generate_dataset_in_correlated_attribute_mode(n, description_file, seed, return_data)
 
 if __name__ == '__main__':
     from time import time
