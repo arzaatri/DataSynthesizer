@@ -15,7 +15,8 @@ class DataGenerator(object):
             self.description = {}
         self.encoded_dataset = None
 
-    def generate_dataset_in_random_mode(self, n, description_file=None, seed=0, minimum=0, maximum=100):
+    def generate_dataset_in_random_mode(self, n, description_file=None, seed=0, minimum=0, maximum=100,
+                                        return_data=True):
         set_random_seed(seed)
         if self.description is None or (self.description is not None and description_file is not None):
             self.description = read_json_file(description_file)
@@ -40,7 +41,10 @@ class DataGenerator(object):
                 else:
                     self.synthetic_dataset[attr] = random.uniform(minimum, maximum, n)
 
-    def generate_dataset_in_independent_mode(self, n, description_file=None, seed=0):
+        if return_data:
+            return self.synthetic_dataset
+            
+    def generate_dataset_in_independent_mode(self, n, description_file=None, seed=0, return_data=True):
         set_random_seed(seed)
         if self.description is None or (self.description is not None and description_file is not None):
             self.description = read_json_file(description_file)
@@ -58,7 +62,11 @@ class DataGenerator(object):
                 binning_indices = column.sample_binning_indices_in_independent_attribute_mode(n)
                 self.synthetic_dataset[attr] = column.sample_values_from_binning_indices(binning_indices)
 
-    def generate_dataset_in_correlated_attribute_mode(self, n, description_file=None, seed=0):
+        if return_data:
+            return self.synthetic_dataset
+        
+    def generate_dataset_in_correlated_attribute_mode(self, n, description_file=None, seed=0, 
+                                                      return_data=True):
         set_random_seed(seed)
         self.n = n
         if self.description is None or (self.description is not None and description_file is not None):
@@ -80,6 +88,9 @@ class DataGenerator(object):
                 # for attributes not in BN or candidate keys, use independent attribute mode.
                 binning_indices = column.sample_binning_indices_in_independent_attribute_mode(n)
                 self.synthetic_dataset[attr] = column.sample_values_from_binning_indices(binning_indices)
+                
+        if return_data:
+            return self.synthetic_dataset
 
     @staticmethod
     def get_sampling_order(bn):
@@ -122,14 +133,14 @@ class DataGenerator(object):
     def save_synthetic_data(self, to_file):
         self.synthetic_dataset.to_csv(to_file, index=False)
 
-    def generate_random(self, n, description_file=None, seed=0, minimum=0, maximum=100):
-        self.generate_dataset_in_random_mode(n, description_file, seed, minimum, maximum)
+    def generate_random(self, n, description_file=None, seed=0, minimum=0, maximum=100, return_data=True):
+        self.generate_dataset_in_random_mode(n, description_file, seed, minimum, maximum, return_data)
     
-    def generate_independent(self, n, description_file=None, seed=0):
-        self.generate_dataset_in_independent_mode(n, description_file, seed)
+    def generate_independent(self, n, description_file=None, seed=0, return_data=True):
+        self.generate_dataset_in_independent_mode(n, description_file, seed, return_data)
         
-    def generate_correlated(self, n, description_file=None, seed=0):
-        self.generate_dataset_in_correlated_attribute_mode(n, description_file, seed)
+    def generate_correlated(self, n, description_file=None, seed=0, return_data=True):
+        self.generate_dataset_in_correlated_attribute_mode(n, description_file, seed, return_data)
 
 if __name__ == '__main__':
     from time import time
