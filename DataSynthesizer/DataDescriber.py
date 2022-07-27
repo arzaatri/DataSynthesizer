@@ -109,6 +109,9 @@ class DataDescriber:
         self.data_description['attribute_description'] = {}
         for attr, column in self.attr_to_column.items():
             self.data_description['attribute_description'][attr] = column.to_json()
+            
+        if file_path:
+            self.save_dataset_description_to_file(file_path)
 
     def describe_dataset_in_independent_attribute_mode(self,
                                                        dataset,
@@ -137,6 +140,9 @@ class DataDescriber:
         for attr, column in self.attr_to_column.items():
             self.data_description['attribute_description'][attr] = column.to_json()
 
+        if file_path:
+            self.save_dataset_description_to_file(file_path)
+            
     def describe_dataset_in_correlated_attribute_mode(self,
                                                       dataset,
                                                       k=0,
@@ -192,6 +198,9 @@ class DataDescriber:
         self.data_description['bayesian_network'] = self.bayesian_network
         self.data_description['conditional_probabilities'] = construct_noisy_conditional_distributions(
             self.bayesian_network, self.df_encoded, epsilon / 2)
+        
+        if file_path:
+            self.save_dataset_description_to_file(file_path)
 
     def read_dataset_from_csv(self, file_name=None):
         try:
@@ -200,6 +209,7 @@ class DataDescriber:
             self.df_input = read_csv(file_name, skipinitialspace=True, na_values=self.null_values,
                                      encoding='latin1')
             self.check_input_df()
+            
             
     def check_input_df(self):
          # Remove columns with empty active domain, i.e., all values are missing.
