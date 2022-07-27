@@ -333,14 +333,16 @@ class DataDescriber:
                         attribute_to_is_candidate_key: Dict[str, bool] = None,
                         categorical_attribute_domain: [str, dict] = None,
                         numerical_attribute_ranges: Dict[str, List] = None,
-                        seed=0):
+                        seed = 0,
+                        file_path: str = None):
         self.describe_dataset_in_random_mode(dataset,
                                              attribute_to_datatype,
                                              attribute_to_is_categorical,
                                              attribute_to_is_candidate_key,
                                              categorical_attribute_domain,
                                              numerical_attribute_ranges,
-                                             seed=seed)
+                                             seed,
+                                             file_path)
     
     def describe_independent(self,
                              dataset,
@@ -350,7 +352,8 @@ class DataDescriber:
                              attribute_to_is_candidate_key: Dict[str, bool] = None,
                              categorical_attribute_domain: str = None,
                              numerical_attribute_ranges: Dict[str, List] = None,
-                             seed=0):
+                             seed = 0,
+                             file_path: str = None):
         self.describe_dataset_in_independent_attribute_mode(dataset,
                                                             epsilon,
                                                             attribute_to_datatype,
@@ -358,7 +361,8 @@ class DataDescriber:
                                                             attribute_to_is_candidate_key,
                                                             categorical_attribute_domain,
                                                             numerical_attribute_ranges,
-                                                            seed=seed)
+                                                            seed,
+                                                            file_path)
     def describe_correlated(self,
                             dataset,
                             k=0,
@@ -368,7 +372,8 @@ class DataDescriber:
                             attribute_to_is_candidate_key: Dict[str, bool] = None,
                             categorical_attribute_domain: str = None,
                             numerical_attribute_ranges: Dict[str, List] = None,
-                            seed=0):
+                            seed = 0,
+                            file_path: str = None):
         self.describe_dataset_in_correlated_attribute_mode(dataset,
                                                            k,
                                                            epsilon,
@@ -377,4 +382,5 @@ class DataDescriber:
                                                            attribute_to_is_candidate_key,
                                                            categorical_attribute_domain,
                                                            numerical_attribute_ranges,
-                                                           seed=seed)
+                                                           seed,
+                                                           file_path)
