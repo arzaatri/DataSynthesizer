@@ -68,7 +68,8 @@ class DataDescriber:
                                         attribute_to_is_candidate_key: Dict[str, bool] = None,
                                         categorical_attribute_domain: [str, dict] = None,
                                         numerical_attribute_ranges: Dict[str, List] = None,
-                                        seed=0):
+                                        seed=0,
+                                        file_path: str = None):
         attribute_to_datatype = attribute_to_datatype or {}
         attribute_to_is_categorical = attribute_to_is_categorical or {}
         attribute_to_is_candidate_key = attribute_to_is_candidate_key or {}
@@ -117,7 +118,8 @@ class DataDescriber:
                                                        attribute_to_is_candidate_key: Dict[str, bool] = None,
                                                        categorical_attribute_domain: str = None,
                                                        numerical_attribute_ranges: Dict[str, List] = None,
-                                                       seed=0):
+                                                       seed=0,
+                                                       file_path: str = None):
         self.describe_dataset_in_random_mode(dataset,
                                              attribute_to_datatype,
                                              attribute_to_is_categorical,
@@ -144,7 +146,8 @@ class DataDescriber:
                                                       attribute_to_is_candidate_key: Dict[str, bool] = None,
                                                       categorical_attribute_domain: str = None,
                                                       numerical_attribute_ranges: Dict[str, List] = None,
-                                                      seed=0):
+                                                      seed=0,
+                                                      file_path: str = None):
         """Generate dataset description using correlated attribute mode.
 
         Parameters
@@ -169,6 +172,9 @@ class DataDescriber:
             Dictionary of {attribute: [min, max]}, e.g., {"age": [25, 65]}
         seed : int or float
             Seed the random number generator.
+        file_path: str
+            Where to save the description file. If not provided, the file is NOT saved,
+            and must be manually saved, using either save_dataset_description_to_file or save_description
         """
         self.describe_dataset_in_independent_attribute_mode(dataset,
                                                             epsilon,
@@ -312,9 +318,13 @@ class DataDescriber:
         with open(file_name, 'w') as outfile:
             json.dump(self.data_description, outfile, indent=4)
 
+    def save_description(self, file_name):
+        self.save_dataset_description_to_file(file_name)
+            
     def display_dataset_description(self):
         print(json.dumps(self.data_description, indent=4))
 
+    
     # More-concise aliases
     def describe_random(self,
                         dataset: str,
